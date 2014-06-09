@@ -22,6 +22,12 @@ Logs vary based on environement.
 - send a mail in case of unhandled exception
 - log to kibana
 
+##Install 
+
+```
+npm install git@github.com:lemonde/node-logger.git
+```
+
 ##Usage
 
 ```javascript
