@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lemonde/node-logger.svg?branch=master)](https://travis-ci.org/lemonde/node-logger)
+
 node-logger
 ===========
 
