@@ -1,0 +1,23 @@
+{
+  "name": "node-logger",
+  "version": "0.0.0",
+  "description": "logging for dev, test and prod env",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test --recursive"
+  },
+  "author": "Yannick Dominguez",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "chai": "^1.9.1"
+  },
+  "dependencies": {
+    "winston": "^0.7.3",
+    "winston-kibana": "^0.1.0",
+    "winston-mail": "^0.2.7",
+    "winston-syslog": "^0.2.5",
+    "winston-elasticsearch": "^0.1.1",
+    "winston-error": "^0.1.0"
+  }
+}
