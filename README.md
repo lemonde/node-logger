@@ -26,30 +26,30 @@ Logs vary based on environement.
 
 ```javascript
 
-var Logger = require(‘node-logger’);
+var Logger = require('node-logger');
 
 
 //instantiate and configure
 var logger = new Logger({
 
-  env: ‘development’,
-  application: ‘myApp’,
+  env: 'development',
+  application: 'myApp',
 
   winston: {
     //winston config object, passed as-is to logger
   },
 
   syslog: {
-    "host": "localhost",
-    "port": 514,
-    "protocol": "udp4",
-    "facility": "local0",
-    "localhost": "unconfigured",
-    "app_name": "myApp"
+    'host': 'localhost',
+    'port': 514,
+    'protocol': 'udp4',
+    'facility': 'local0',
+    'localhost': 'unconfigured',
+    'app_name': 'myApp'
   },
 
-  uncaughtExceptionsTo: ‘my@mail.com’:
-  smtpHost: ‘my.smtp.host’
+  uncaughtExceptionsTo: 'my@mail.com':
+  smtpHost: 'my.smtp.host'
 });
 
 //close all connections
