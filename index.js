@@ -6,13 +6,18 @@ var winstonKibana = require('winston-kibana');
 var winstonError = require('winston-error');
 
 /**
- * @param config.env
- * @param config.application
- * @param config.winston
- * @param config.syslog
- * @param config.uncaughtExceptionsTo
- * @param config.smtpHost
- * @return logger
+ * Create a winston logger and set it up with various
+ * logging mechanism based on the current environment
+ *
+ * @param {string} config.env either 'development', 'test', 'e2e' or 'production'
+ * @param {string} config.application name of the logged application
+ * @param {Object} config.winston a winston config object
+ * @param {Object} config.syslog syslog configuration object
+ * @param {string} config.uncaughtExceptionsTo email adress to send to when crash
+ * in production env
+ * @param {string} config.smtpHost smtp host to send to when crah in production
+ * env
+ * @return {Logger} A winston logger
  */
 module.exports = function (config) {
 
