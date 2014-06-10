@@ -57,7 +57,7 @@ var logger = new Logger({
   },
 
   uncaughtExceptionsTo: 'my@mail.com':
-  smtpHost: 'my.smtp.host'
+  smtpHost: 'my.smtp.host' //defaults to 'relai.lemonde.fr'
 });
 
 //close all connections
