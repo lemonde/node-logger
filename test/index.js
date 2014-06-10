@@ -49,8 +49,6 @@ describe('logger', function () {
     expect(logger.transports.memory).to.be.undefined;
     expect(logger.transports.console).to.not.be.undefined;
     expect(logger.exceptionHandlers.mail).to.not.be.undefined;
-
-    expect(logger.exceptionHandlers.mail.server.smtp.host).to.eql('relai.lemonde.fr');
   });
 
   it('should expose a close function', function(done){
