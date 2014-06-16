@@ -31,8 +31,11 @@ describe('logger', function () {
   });
 
   it('should have a kibana rewriter', function () {
-    var logger = new Logger({});
-    expect(addRewriterStub).to.have.been.called;
+    var logger = new Logger({
+      application: 'test'
+    });
+    expect(addRewriterStub).to.have.been.calledWith(
+      sinon.match(winstonKibana({application: 'test'})));
   });
 
   it('should be configured for a dev environnement', function() {
@@ -75,14 +78,6 @@ describe('logger', function () {
     expect(handleExceptionsStub).to.have.been.called;
     expect(addStub).to.have.been.calledWith(winston.transports.Syslog);
     expect(addStub).to.have.been.calledWith(winston.transports.Console);
-  });
-
-  it('should default to a development environment', function () {
-    var logger = new Logger({
-      env: 'foobar',
-      application: 'test',
-      uncaughtExceptionsTo: 'test'
-    });
   });
 
   it('should expose a close function', function(done){
