@@ -1,12 +1,41 @@
 var Logger = require('../');
-var expect = require('chai').expect;
+var chai = require('chai');
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+var winston = require('winston');
 var winstonKibana = require('winston-kibana');
+var winstonSyslog = require('winston-syslog');
+var winstonError = require('winston-error');
+var winstonElasticSearch = require('winston-elasticsearch');
+
+var expect = chai.expect;
+chai.use(sinonChai);
 
 describe('logger', function () {
+  var loggerStub, addStub, addRewriterStub, handleExceptionsStub;
+  beforeEach(function () {
+    addStub = sinon.stub();
+    addRewriterStub = sinon.stub();
+    handleExceptionsStub = sinon.stub();
+
+    loggerStub = sinon.stub(winston, 'Logger');
+    loggerStub.returns({
+      add: addStub,
+      addRewriter: addRewriterStub,
+      handleExceptions: handleExceptionsStub
+    });
+  });
+
+  afterEach(function () {
+    winston.Logger.restore();
+  });
 
   it('should have a kibana rewriter', function () {
-    var logger = new Logger({});
-    expect(logger.rewriters[0]).to.not.be.undefined;
+    var logger = new Logger({
+      application: 'test'
+    });
+    expect(addRewriterStub).to.have.been.calledWith(
+      sinon.match(winstonKibana({application: 'test'})));
   });
 
   it('should be configured for a dev environnement', function() {
@@ -15,8 +44,8 @@ describe('logger', function () {
       application: 'test'
     });
 
-    expect(logger.transports.console).to.not.be.undefined;
-    expect(logger.transports.memory).to.be.undefined;
+    expect(addStub).to.have.been.calledWith(winstonElasticSearch);
+    expect(addStub).to.have.been.calledWith(winston.transports.Console);
   });
 
   it('should be configured for a test environment', function () {
@@ -25,8 +54,8 @@ describe('logger', function () {
       application: 'test'
     });
 
-    expect(logger.transports.console).to.be.undefined;
-    expect(logger.transports.memory).to.not.be.undefined;
+    expect(addStub).to.have.been.calledWith(winston.transports.Memory);
+    expect(addStub).to.not.have.been.calledWith(winston.transports.Console);
   });
 
   it('should be configured for a e2e environment', function () {
@@ -35,8 +64,8 @@ describe('logger', function () {
       application: 'test'
     });
 
-    expect(logger.transports.memory).to.not.be.undefined;
-    expect(logger.transports.console).to.be.undefined;
+    expect(addStub).to.have.been.calledWith(winston.transports.Memory);
+    expect(addStub).to.not.have.been.calledWith(winston.transports.Console);
   });
 
   it('should be configured for a prod environment', function () {
@@ -46,9 +75,9 @@ describe('logger', function () {
       uncaughtExceptionsTo: 'test'
     });
 
-    expect(logger.transports.memory).to.be.undefined;
-    expect(logger.transports.console).to.not.be.undefined;
-    expect(logger.exceptionHandlers.mail).to.not.be.undefined;
+    expect(handleExceptionsStub).to.have.been.called;
+    expect(addStub).to.have.been.calledWith(winston.transports.Syslog);
+    expect(addStub).to.have.been.calledWith(winston.transports.Console);
   });
 
   it('should expose a close function', function(done){
