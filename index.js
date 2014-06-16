@@ -119,6 +119,9 @@ module.exports = function (config) {
   return {
     log: log,
     info: log.bind(null, 'info'),
+    warn: log.bind(null, 'warn'),
+    error: log.bind(null, 'error'),
+    debug: log.bind(null, 'debug'),
     close: close
   };
 };

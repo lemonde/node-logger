@@ -101,14 +101,21 @@ describe('logger', function () {
     expect(logStub).to.have.been.calledWith('info', 'log');
   });
 
-  it('should expose an info function', function () {
+  it('should expose an level functions', function () {
     var logger = new Logger({
       env: 'none',
       application: 'test'
     });
 
     logger.info('log');
+    logger.error('log');
+    logger.warn('log');
+    logger.debug('log');
+
     expect(logStub).to.have.been.calledWith('info', 'log');
+    expect(logStub).to.have.been.calledWith('error', 'log');
+    expect(logStub).to.have.been.calledWith('warn', 'log');
+    expect(logStub).to.have.been.calledWith('debug', 'log');
   });
 
   it('should expose a close function', function(done){
