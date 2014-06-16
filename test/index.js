@@ -91,16 +91,24 @@ describe('logger', function () {
     });
   });
 
-  it('should add a metadata object to the log object', function () {
+  it('should expose a log function', function () {
     var logger = new Logger({
       env: 'none',
-      application: 'test-app'
+      application: 'test'
     });
 
-    logger.log('info', 'log', {foo: 'bar'});
+    logger.log('info', 'log');
+    expect(logStub).to.have.been.calledWith('info', 'log');
+  });
 
-    expect(logStub).to.have.been.calledWith('info', 'log',
-                                            {'test-app': {foo: 'bar'}});
+  it('should expose an info function', function () {
+    var logger = new Logger({
+      env: 'none',
+      application: 'test'
+    });
+
+    logger.info('log');
+    expect(logStub).to.have.been.calledWith('info', 'log');
   });
 
   it('should expose a close function', function(done){
@@ -113,4 +121,17 @@ describe('logger', function () {
       done();
     });
   });
+
+  it('should add a metadata object to the log object', function () {
+    var logger = new Logger({
+      env: 'none',
+      application: 'test-app'
+    });
+
+    logger.log('info', 'log', {foo: 'bar'});
+
+    expect(logStub).to.have.been.calledWith('info', 'log',
+                                            {'test-app': {foo: 'bar'}});
+  });
+
 });
