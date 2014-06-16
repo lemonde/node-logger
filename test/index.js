@@ -12,17 +12,20 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 describe('logger', function () {
-  var loggerStub, addStub, addRewriterStub, handleExceptionsStub;
+  var loggerStub, addStub, addRewriterStub,
+      handleExceptionsStub, infoStub, logStub;
   beforeEach(function () {
     addStub = sinon.stub();
     addRewriterStub = sinon.stub();
     handleExceptionsStub = sinon.stub();
+    logStub = sinon.stub();
 
     loggerStub = sinon.stub(winston, 'Logger');
     loggerStub.returns({
       add: addStub,
       addRewriter: addRewriterStub,
-      handleExceptions: handleExceptionsStub
+      handleExceptions: handleExceptionsStub,
+      log: logStub
     });
   });
 
@@ -78,6 +81,26 @@ describe('logger', function () {
     expect(handleExceptionsStub).to.have.been.called;
     expect(addStub).to.have.been.calledWith(winston.transports.Syslog);
     expect(addStub).to.have.been.calledWith(winston.transports.Console);
+  });
+
+  it('should default to a development environment', function () {
+    var logger = new Logger({
+      env: 'foobar',
+      application: 'test',
+      uncaughtExceptionsTo: 'test'
+    });
+  });
+
+  it('should add a metadata object to the log object', function () {
+    var logger = new Logger({
+      env: 'none',
+      application: 'test-app'
+    });
+
+    logger.log('info', 'log', {foo: 'bar'});
+
+    expect(logStub).to.have.been.calledWith('info', 'log',
+                                            {'test-app': {foo: 'bar'}});
   });
 
   it('should expose a close function', function(done){

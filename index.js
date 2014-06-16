@@ -40,15 +40,29 @@ module.exports = function (config) {
   winstonError(logger);
 
   /**
+   * log a message
+   *
+   * @param {String} level log level (info, error, debug...)
+   * @param {String} message log message
+   * @param {Object} meta arbitraty metadata associated with the log
+   */
+  function log(level, message, meta) {
+    var appMeta = {};
+    appMeta[config.application] = meta;
+    logger.log(level, message, appMeta);
+  }
+
+  /**
    * close the logger.
    */
 
-  logger.close = function (cb) {
+  function close(cb) {
     if (logger.transports && logger.transports.Syslog)
       logger.transports.Syslog.close();
 
     if (_.isFunction(cb)) process.nextTick(cb);
-  };
+  }
+
 
   /**
    * configuration.
@@ -88,6 +102,11 @@ module.exports = function (config) {
     logger.exitonerror = false;
   }
 
-  return logger;
+
+  return {
+    log: log,
+    info: log.bind('info'),
+    close: close
+  };
 };
 
