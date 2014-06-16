@@ -20,7 +20,6 @@ var winstonError = require('winston-error');
  * @return {Logger} A winston logger
  */
 module.exports = function (config) {
-  config.smtpHost = config.smtpHost || 'relai.lemonde.fr';
 
   /**
    * create the logger.
